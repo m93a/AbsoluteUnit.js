@@ -1,2 +1,2 @@
-import UnitMath from './src/Unit.js'
+import UnitMath from './src/Unit.ts'
 export default UnitMath

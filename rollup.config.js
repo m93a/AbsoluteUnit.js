@@ -1,6 +1,7 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
+import ts from 'rollup-plugin-typescript2'
+import babel from '@rollup/plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 
 const teserOptions = {
@@ -25,7 +26,7 @@ const babelOptions = {
 }
 
 const name = 'UnitMath'
-const input = 'src/Unit.js'
+const input = 'src/Unit.ts'
 
 export default [
   // UMD build
@@ -36,7 +37,9 @@ export default [
       file: 'dist/UnitMath.js',
       format: 'umd'
     },
-    plugins: [babel(babelOptions),
+    plugins: [
+      ts({ check: false }),
+      babel(babelOptions),
       resolve(),
       commonjs()]
   },
@@ -50,6 +53,7 @@ export default [
       name
     },
     plugins: [
+      ts({ check: false }),
       babel(babelOptions),
       resolve(),
       commonjs(),

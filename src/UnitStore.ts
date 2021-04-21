@@ -1,6 +1,6 @@
-import createParser from './Parser.js'
-import { normalize } from './utils.js'
-import * as builtIns from './BuiltIns.js'
+import createParser from './Parser.ts'
+import { normalize } from './utils.ts'
+import * as builtIns from './BuiltIns.ts'
 
 /**
  * Creates a new unit store.
