@@ -1,7 +1,11 @@
-import babel from 'rollup-plugin-babel'
+import { DEFAULT_EXTENSIONS } from '@babel/core';
+import babel from '@rollup/plugin-babel'
+import babelConfig from './babel.config.json'
+
 import typescript from 'rollup-plugin-typescript2'
-import commonjs from 'rollup-plugin-commonjs'
+import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
+
 
 const teserOptions = {
   compress: {
@@ -12,16 +16,9 @@ const teserOptions = {
 }
 
 const babelOptions = {
-  presets: [
-    ['@babel/preset-env', {
-      useBuiltIns: 'usage',
-      debug: true,
-      corejs: 3
-    }]
-  ],
-  ignore: [
-    'node_modules'
-  ]
+  babelHelpers: 'bundled',
+  extensions: [ ...DEFAULT_EXTENSIONS, 'ts', 'tsx' ],
+  ...babelConfig,
 }
 
 const tsOptions = {
@@ -40,7 +37,7 @@ const tsOptionsDeclaration = {
 }
 
 const name = 'UnitMath'
-const input = 'src/Unit.ts'
+const input = './src/Unit.ts'
 
 export default [
   // UMD build
@@ -48,61 +45,62 @@ export default [
     input,
     output: {
       name,
-      file: 'dist/UnitMath.js',
-      format: 'umd'
-    },
-    plugins: [
-      typescript(tsOptions),
-      babel(babelOptions),
-      commonjs()
-    ]
-  },
-  // minified UMD build
-  {
-    input,
-    output: {
-      file: 'dist/UnitMath.min.js',
+      file: './dist/UnitMath.js',
       format: 'umd',
-      indent: false,
-      name
     },
     plugins: [
       typescript(tsOptions),
       babel(babelOptions),
       commonjs(),
-      terser(teserOptions)
-    ]
+    ],
   },
   // minified UMD build
   {
     input,
     output: {
-      file: 'dist/UnitMath.min2.js',
+      file: './dist/UnitMath.min.js',
       format: 'umd',
       indent: false,
-      name
+      name,
     },
     plugins: [
       typescript(tsOptions),
-      terser(teserOptions)
+      babel(babelOptions),
+      commonjs(),
+      terser(teserOptions),
+    ],
+  },
+  // minified UMD build
+  {
+    input,
+    output: {
+      file: './dist/UnitMath.nobabel.min.js',
+      format: 'umd',
+      indent: false,
+      name,
+    },
+    plugins: [
+      typescript(tsOptions),
+      terser(teserOptions),
     ]
   },
   // es build
   {
     input,
     output: {
-      file: 'es/UnitMath.js',
+      file: './es/UnitMath.js',
       format: 'es'
     },
     plugins: [
-      typescript(tsOptions)
+      typescript(tsOptions),
+      babel(babelOptions),
     ]
   },
   // d.ts build
   {
     input,
     output: {
-      dir: 'types'
+      dir: './types'
     },
     plugins: [
       typescript(tsOptionsDeclaration)
@@ -112,13 +110,27 @@ export default [
   {
     input,
     output: {
-      file: 'es/UnitMath.min.js',
+      file: './es/UnitMath.min.js',
       format: 'es',
       indent: false
     },
     plugins: [
       typescript(tsOptions),
-      terser(teserOptions)
+      babel(babelOptions),
+      terser(teserOptions),
+    ]
+  },
+  // minified es build
+  {
+    input,
+    output: {
+      file: './es/UnitMath.nobabel.min.js',
+      format: 'es',
+      indent: false
+    },
+    plugins: [
+      typescript(tsOptions),
+      terser(teserOptions),
     ]
   }
 ]
