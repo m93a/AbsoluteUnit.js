@@ -1,9 +1,9 @@
 {
   "name": "absoluteunit.js",
-  "version": "0.0.3",
-  "description": "JavaScript library for unit conversion and arithmetic",
-  "main": "dist/UnitMath.js",
-  "module": "es/UnitMath.js",
+  "version": "0.1.0",
+  "description": "JavaScript library for unit conversion and arithmetic, a fork of UnitMath",
+  "main": "dist/AbsoluteUnit.js",
+  "module": "es/AbsoluteUnit.js",
   "types": "types/Unit.d.ts",
   "files": [
     "dist",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ericman314/unitmath.git"
+    "url": "git+https://github.com/m93a/AbsoluteUnit.js.git"
   },
   "keywords": [
     "unit",
@@ -31,14 +31,15 @@
     "arithmetic",
     "math",
     "engineering",
-    "science"
+    "science",
+    "typescript"
   ],
-  "author": "Eric Mansfield",
+  "author": "Michal Grňo",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ericman314/unitmath/issues"
+    "url": "https://github.com/m93a/AbsoluteUnit.js/issues"
   },
-  "homepage": "https://github.com/ericman314/unitmath#readme",
+  "homepage": "https://github.com/m93a/AbsoluteUnit.js#readme",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.15.0",

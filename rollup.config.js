@@ -36,7 +36,7 @@ const tsOptionsDeclaration = {
   }
 }
 
-const name = 'UnitMath'
+const name = 'AbsoluteUnit'
 const input = './src/Unit.ts'
 
 export default [
@@ -45,7 +45,7 @@ export default [
     input,
     output: {
       name,
-      file: './dist/UnitMath.js',
+      file: './dist/AbsoluteUnit.js',
       format: 'umd',
     },
     plugins: [
@@ -58,7 +58,7 @@ export default [
   {
     input,
     output: {
-      file: './dist/UnitMath.min.js',
+      file: './dist/AbsoluteUnit.min.js',
       format: 'umd',
       indent: false,
       name,
@@ -74,7 +74,7 @@ export default [
   {
     input,
     output: {
-      file: './dist/UnitMath.nobabel.min.js',
+      file: './dist/AbsoluteUnit.nobabel.min.js',
       format: 'umd',
       indent: false,
       name,
@@ -88,7 +88,7 @@ export default [
   {
     input,
     output: {
-      file: './es/UnitMath.js',
+      file: './es/AbsoluteUnit.js',
       format: 'es'
     },
     plugins: [
@@ -110,7 +110,7 @@ export default [
   {
     input,
     output: {
-      file: './es/UnitMath.min.js',
+      file: './es/AbsoluteUnit.min.js',
       format: 'es',
       indent: false
     },
@@ -124,7 +124,7 @@ export default [
   {
     input,
     output: {
-      file: './es/UnitMath.nobabel.min.js',
+      file: './es/AbsoluteUnit.nobabel.min.js',
       format: 'es',
       indent: false
     },

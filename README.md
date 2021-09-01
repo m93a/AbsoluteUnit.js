@@ -1,21 +1,22 @@
-# UnitMath
-UnitMath is a JavaScript library for unit conversion and arithmetic. 
-
-[![Build Status](https://travis-ci.org/ericman314/UnitMath.svg?branch=master)](https://travis-ci.org/ericman314/UnitMath)
-[![codecov](https://codecov.io/gh/ericman314/UnitMath/branch/master/graph/badge.svg)](https://codecov.io/gh/ericman314/UnitMath)
+# AbsoluteUnit.js
+AbsoluteUnit.js is a JavaScript library for unit conversion and arithmetic. It is a fork of [UnitMath](https://github.com/ericman314/UnitMath) which itself separated from [math.js](https://github.com/josdejong/mathjs).
 
 ## Install
 
 ```
-npm install unitmath
+yarn add absoluteunit.js
+```
+```
+npm install absoluteunit.js
 ```
 
-*UnitMath is still in the early stages of development. The following API may be incomplete, or refer to features that are not yet implemented.*
+
+*AbsoluteUnit.js is still in the early stages of development. The following API may be incomplete, or refer to features that are not yet implemented.*
 
 ## Use
 
 ```js
-const unit = require('unitmath')
+import unit from 'absoluteunit.js'
 
 unit('40 km').to('mile')  // 62.1371192237334 mile
 unit('5 m').div('2 s')   // 2.5 m / s
@@ -110,10 +111,10 @@ You can also define custom formatters; see [Custom Formatter](#custom-formatter)
 
 ### Configuring
 
-UnitMath can be configured using `unit.config(options)`. The function returns a *new* instance of UnitMath with the specified configuration options:
+AbsoluteUnit.js can be configured using `unit.config(options)`. The function returns a *new* instance of AbsoluteUnit.js with the specified configuration options:
 
 ```js
-const unit = require('unitmath').config({ system: 'us' })
+const unit = require('absoluteunit.js').config({ system: 'us' })
 ```
 
 To query the current configuration, call `unit.config()` with no arguments.
@@ -146,7 +147,7 @@ These are the available options and their defaults:
 
 - `prefixesToChooseFrom` -- *Default:* `'common'`. When choosing a prefix, whether to consider all allowed prefixes or just the common ones for that unit. Possible values are `'common'` and `'all'`.
 
-- `simplify` -- *Default:* `'auto'`. Specifies if UnitMath should attempt to simplify the units before formatting as a string. Possible values are `'auto'`, `'always'`, or `'never'`. If `'auto'` or `'always'`, then `u.toString()` essentially becomes equivalent to `u.simplify().toString()`. The original `u` is never modified. When `'auto'` is used, simplification is skipped if the unit is valueless or was constructed using the `to()` method.
+- `simplify` -- *Default:* `'auto'`. Specifies if AbsoluteUnit.js should attempt to simplify the units before formatting as a string. Possible values are `'auto'`, `'always'`, or `'never'`. If `'auto'` or `'always'`, then `u.toString()` essentially becomes equivalent to `u.simplify().toString()`. The original `u` is never modified. When `'auto'` is used, simplification is skipped if the unit is valueless or was constructed using the `to()` method.
 
 - `simplifyThreshold` -- *Default:* `2`. A factor that affects whether the `format` method will output the original unit or a simplified version. The original unit will always be output unless the 'complexity' of the unit is reduced by an amount equal to or greater than the `simplifyThreshold`. A lower value results in more units being simplified, while a higher number results in fewer units being simplified. The complexity of a unit is roughly equal to the number of 'symbols' that are required to write the unit.
 
@@ -155,7 +156,7 @@ These are the available options and their defaults:
   unit('8 kg m / s^2').format({ simplifyThreshold: 6 })) // 8 kg m / s^2
   ```
 
-- `system` -- *Default:* `'auto'`. The unit system to use when simplifying a `unit`. Available systems are `si`, `cgs`, `us`, and `auto`. When `system === 'auto'`, UnitMath will try to infer the unit system from the individual units that make up that `unit`.
+- `system` -- *Default:* `'auto'`. The unit system to use when simplifying a `unit`. Available systems are `si`, `cgs`, `us`, and `auto`. When `system === 'auto'`, AbsoluteUnit.js will try to infer the unit system from the individual units that make up that `unit`.
 
   ```js
   unit = unit.config({ system: 'auto' })
@@ -164,7 +165,7 @@ These are the available options and their defaults:
   unit('400 N').div('10 cm^2').toString()  // "400 kPa"
   ```
 
-  Specifying a unit system other than `'auto'` will force UnitMath to use the specified system. Use the `config` function to apply the system everywhere, or use the `format` function to apply to a single statement:
+  Specifying a unit system other than `'auto'` will force AbsoluteUnit.js to use the specified system. Use the `config` function to apply the system everywhere, or use the `format` function to apply to a single statement:
 
   ```js
   unit = unit.config({ system: 'us' })
@@ -176,7 +177,7 @@ These are the available options and their defaults:
 
   ```
 
-- `subsystem` -- *Default:* `'auto'` *Not yet implemented.* The subsystem, or technical field, etc., to use when simplifying a `unit`. It can provide additional hints about which units to use when there are multiple options within the same system. Available subsystems are `'mechanics'`, `'chemistry'`, `'electricity_and_magnetism'`, etc. When `subsystem === 'auto'`, UnitMath will try to infer the subsystem from the individual units that make up that `unit`:
+- `subsystem` -- *Default:* `'auto'` *Not yet implemented.* The subsystem, or technical field, etc., to use when simplifying a `unit`. It can provide additional hints about which units to use when there are multiple options within the same system. Available subsystems are `'mechanics'`, `'chemistry'`, `'electricity_and_magnetism'`, etc. When `subsystem === 'auto'`, AbsoluteUnit.js will try to infer the subsystem from the individual units that make up that `unit`:
 
   ```js
   // Proposed, but not yet implemented
@@ -201,19 +202,19 @@ These are the available options and their defaults:
   unit('6 furlongs/fortnight').to('m/s') // 0.000997857142857143 m / s
   ```
 
-- `type`. An object that allows UnitMath to work with custom numeric types. See [Custom Types](#custom-types) for complete details and examples.
+- `type`. An object that allows AbsoluteUnit.js to work with custom numeric types. See [Custom Types](#custom-types) for complete details and examples.
 
-Because `unit.config(options)` returns a new instance of UnitMath, is is technically possible to perform operations between units created from different instances. The resulting behavior is undefined, however, so it is probably best to avoid doing this.
+Because `unit.config(options)` returns a new instance of AbsoluteUnit.js, is is technically possible to perform operations between units created from different instances. The resulting behavior is undefined, however, so it is probably best to avoid doing this.
 
 **Important:** `unit.config(options)` returns a *new* instance of the factory function, so you must assign the return value of `unit.config(options)` to some variable, otherwise the new options won't take effect:
 
 ```js
-let unit = require('unitmath')
+import unit from 'absoluteunit.js'
 
 unit.config(options) // This has no effect
 ```
 
-### Extending UnitMath
+### Extending AbsoluteUnit.js
 
 #### User-Defined Units
 
@@ -235,7 +236,7 @@ The `definitions` contains two properties which allow additional customization o
 
 **definitions.units**
 
-This object contains the units that are made available by UnitMath. Each key in `definitions.units` becomes a new unit. The easiest way to define a unit is to provide a string representation in terms of other units:
+This object contains the units that are made available by AbsoluteUnit.js. Each key in `definitions.units` becomes a new unit. The easiest way to define a unit is to provide a string representation in terms of other units:
 
 ```js
 units: {
@@ -284,7 +285,7 @@ You can also supply an object for additional customization. These are all the op
   // Correct
   units: {
     meter: { quantity: 'LENGTH', value: 1 }
-    square_meter: { value: '1 meter^2' }  
+    square_meter: { value: '1 meter^2' }
   }
   ```
 
@@ -383,7 +384,7 @@ systems: {
 }
 ```
 
-When UnitMath formats a unit, it will try to use one of the units from the specified system first. If the system does not contain a matching unit, it will choose from all available units.
+When AbsoluteUnit.js formats a unit, it will try to use one of the units from the specified system first. If the system does not contain a matching unit, it will choose from all available units.
 
 **definitions.skipBuiltIns**
 
@@ -391,7 +392,7 @@ A boolean value indicating whether to skip creation of the built-in units. If `t
 
 #### Querying current unit definitions ####
 
-You can view all the current definitions by calling `unit.definitions()`. This object contains all the built-in units, prefixes, unit systems, base quantities, and quantities. If you have configured UnitMath with additional definitions, these will also be included in the return value from `unit.definitions()`.
+You can view all the current definitions by calling `unit.definitions()`. This object contains all the built-in units, prefixes, unit systems, base quantities, and quantities. If you have configured AbsoluteUnit.js with additional definitions, these will also be included in the return value from `unit.definitions()`.
 
 ```js
 unit.definitions()
@@ -400,7 +401,7 @@ unit.definitions()
 Below is an abbreviated sample output from `unit.definitions()`. It can serve as a starting point to create your own definitions.
 
 ```js
-{ 
+{
   units: {
     '': { quantity: 'UNITLESS', value: 1 },
     meter: {
@@ -438,13 +439,13 @@ Below is an abbreviated sample output from `unit.definitions()`. It can serve as
 
 #### Custom Types
 
-You can easily extend UnitMath to work with custom types. The `type` option is an object containing several key/value pairs, where each value is a function that replaces the normal `+`, `-`, `*`, `/`, and other arithmetic operators used internally by UnitMath.
+You can easily extend AbsoluteUnit.js to work with custom types. The `type` option is an object containing several key/value pairs, where each value is a function that replaces the normal `+`, `-`, `*`, `/`, and other arithmetic operators used internally by AbsoluteUnit.js.
 
 Example using Decimal.js as the custom type:
 
 ```js
 const Decimal = require('decimal.js')
-const unit = require('unitmath').config({
+const unit = require('absoluteunit.js').config({
   type: {
     clone: Decimal,
     conv: Decimal,
@@ -471,14 +472,14 @@ let u = unit('2.74518864784926316174649567946 m')
 Below is a list of functions, their signatures, and when they are required.
 
 Required always:
-  - `clone: (a: T) => T`          
-  - `conv: (a: number | string | T) => T` 
-  - `add: (a: T, b: T) => T`     
-  - `sub: (a: T, b: T) => T`     
-  - `mul: (a: T, b: T) => T`     
-  - `div: (a: T, b: T) => T`     
+  - `clone: (a: T) => T`
+  - `conv: (a: number | string | T) => T`
+  - `add: (a: T, b: T) => T`
+  - `sub: (a: T, b: T) => T`
+  - `mul: (a: T, b: T) => T`
+  - `div: (a: T, b: T) => T`
   - `pow: (a: T, b: number) => T`
-  
+
 Required for prefix = 'auto' or 'always':
   - `abs: (a: T) => T`
   - `lt: (a: T, b: T) => boolean`
@@ -494,11 +495,11 @@ Required for specific functions:
 Optional:
   - `format: (a: T, options: any) => string`
 
-The `add`, `sub`, `mul`, `div`, and `pow` functions replace `+`, `-`, `*`, `/`, and `Math.pow`, respectively. The `clone` function should return a clone of your custom type (same value, different object). 
+The `add`, `sub`, `mul`, `div`, and `pow` functions replace `+`, `-`, `*`, `/`, and `Math.pow`, respectively. The `clone` function should return a clone of your custom type (same value, different object).
 
-The `conv` function must, at a minimum, be capable of converting both strings and numbers into your custom type. If given a custom type, it should return it unchanged, or return a clone. Among other things, the `conv` function is used by UnitMath to convert the values of the built-in units to your custom type.
+The `conv` function must, at a minimum, be capable of converting both strings and numbers into your custom type. If given a custom type, it should return it unchanged, or return a clone. Among other things, the `conv` function is used by AbsoluteUnit.js to convert the values of the built-in units to your custom type.
 
-UnitMath will also use the `conv` function when constructing units from numbers and strings. If your custom type is representable using decimal or scientific notation (such as `6.022e+23`), you can include both the value and the units in a single string:
+AbsoluteUnit.js will also use the `conv` function when constructing units from numbers and strings. If your custom type is representable using decimal or scientific notation (such as `6.022e+23`), you can include both the value and the units in a single string:
 
 ```js
 // Supply a single string, and the numeric portion will be parsed using type.conv
@@ -519,7 +520,7 @@ The functions `clone`, `conv`, `add`, `sub`, `mul`, `div`, and `pow` are always 
 
 #### Custom Formatter
 
-UnitMath will use your type's `toString` method when formatting a unit. You can use a different formatter by setting the `type.format` function. This works even if you are not using custom types. Any arguments you pass to the unit's `format` or `toString` method will also be passed to your custom `format` function:
+AbsoluteUnit.js will use your type's `toString` method when formatting a unit. You can use a different formatter by setting the `type.format` function. This works even if you are not using custom types. Any arguments you pass to the unit's `format` or `toString` method will also be passed to your custom `format` function:
 
 ```js
 let unitFunny = require('../index.js').config({
@@ -535,15 +536,15 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
 
 ### Factory Function
 
-- `unit(value: number, unitString: string)`  
-  `unit(value: number)`  
-  `unit(valueAndUnitString: string)`  
-  `unit()`  
+- `unit(value: number, unitString: string)`
+  `unit(value: number)`
+  `unit(valueAndUnitString: string)`
+  `unit()`
 
   Creates a unit with the specified value and unit string. If `valueAndUnitString` is supplied, it must specify both the numeric portion and the units portion of the unit.
 
   ```js
-  const unit = require('unitmath')
+  import unit from 'absoluteunit.js'
   unit(60, 'mile/hour') // 60 mile / hour
   unit(60) // 60
   unit('60 mile/hour') // 60 mile / hour
@@ -553,7 +554,7 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
 
   The string used to specify the unit (`valueAndUnitString` or `unitString`) must be in the following format:
 
-  ``` 
+  ```
   [value][numerator][/denominator]
 
   numerator, denominator:
@@ -643,7 +644,7 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
   unit('300 degC').abs() // -246.3 degC
   ```
 
-- `#to(target: unit | string)`  
+- `#to(target: unit | string)`
   `#to()`
 
   Converts this unit to the specified target unit or string. The returned unit will be "fixed", so it will not be auto-simplified or auto-prefixed in `format()`. If `to()` is called on the unit with no arguments, then a "fixed" clone of the unit is returned.
@@ -737,7 +738,7 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
 - `#hasQuantity(quantity: string)`
 
   Returns true if this unit matches the given quantity.
-  
+
   ```js
   unit('5 m/s^2').hasQuantity('ACCELERATION') // true
   ```
@@ -784,7 +785,7 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
 
   Compares this and another unit and returns true if this unit is greater than or equal to the other.
 
-- `#format(options)`  
+- `#format(options)`
 
   Formats this unit as a string. Formatting options can be supplied which will override the configured options. See [Configuring](#configuring) for a list of all options and their effects.
 
@@ -801,7 +802,7 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
   Returns the current configuration.
 
   ```js
-  const unit = require('unitmath')
+  import unit from 'absoluteunit.js'
   unit.config()
   ```
 
@@ -810,7 +811,7 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
   Configure a new unit namespace with the given options (see [Configuring](#configuring))
 
   ```js
-  const unit = require('unitmath').config({ option1, option2, ... })
+  const unit = require('absoluteunit.js').config({ option1, option2, ... })
   ```
 
 - `exists(singleUnitString:string)`
@@ -818,7 +819,7 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
   Tests if the given unit, optionally with a prefix, exists.
 
   ```js
-  const unit = require('unitmath')
+  import unit from 'absoluteunit.js'
   unit.exists('km') // true
   ```
 
@@ -898,15 +899,17 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
 
 This is a community-supported project; all contributions are welcome. Please open an issue or submit a pull request.
 
-## Acknowledgements
+To build the project, first clone it from GitHub and then run `yarn build` in the project directory. To clean the built files, run `yarn clean`.
 
-Many thanks to Jos de Jong (@josdejong), the original author of `Unit.js`, who suggested the idea of splitting the file off from [Math.js](https://mathjs.org/) and into its own library.
 
-### Contributors
+### Authors / Contributors
 
+- Jos de Jong (https://github.com/josdejong)
+- Eric Mansfield (https://github.com/ericman314)
 - Harry Sarson (https://github.com/harrysarson)
 - Nick Ewing (https://github.com/nickewing)
+- Michal Grňo (https://github.com/m93a)
 
 ## License
 
-UnitMath is released under the Apache-2.0 license.
+AbsoluteUnit.js is released under the Apache-2.0 license.
