@@ -31,12 +31,10 @@ const tsOptions = {
 
 const tsOptionsDeclaration = {
   ...tsOptions,
-  useTsconfigDeclarationDir: true,
   tsconfigOverride: {
     compilerOptions: {
       declaration: true,
       emitDeclarationOnly: true,
-      outFile: 'es/UnitMath.d.ts'
     }
   }
 }
@@ -103,6 +101,9 @@ export default [
   // d.ts build
   {
     input,
+    output: {
+      dir: 'types'
+    },
     plugins: [
       typescript(tsOptionsDeclaration)
     ]

@@ -1,18 +1,18 @@
 {
-  "name": "unitmath",
-  "version": "0.8.6",
+  "name": "absoluteunit.js",
+  "version": "0.0.1",
   "description": "JavaScript library for unit conversion and arithmetic",
-  "main": "index.js",
-  "module": "src/Unit.js",
+  "main": "dist/UnitMath.js",
+  "module": "es/UnitMath.js",
+  "types": "types/Unit.d.ts",
   "files": [
     "dist",
-    "lib",
     "es",
-    "src"
+    "types"
   ],
   "scripts": {
     "build": "rollup -c",
-    "prepublishOnly": "npm test && npm run test:bundle",
+    "clean": "rm -rf ./es && rm -rf ./dist && rm -rf ./types",
     "test": "npm run test:src && npm run lint",
     "test:src": "jest --watch",
     "test:bundle": "npm run build && jest --testMatch '**/test/**/*.test-bundle.js'",

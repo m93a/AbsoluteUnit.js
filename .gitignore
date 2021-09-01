@@ -1,7 +1,7 @@
 node_modules
-dist/
-es/
-HOWTO.md
+dist
+es
+types
 .vscode/launch.json
 .nyc_output
 coverage
