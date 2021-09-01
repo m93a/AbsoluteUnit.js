@@ -1,7 +1,18 @@
+import { UnitPropsButCooler, Options, AtomicUnit } from "./Unit"
+
+export interface ParsedUnit<V = any> {
+  units?: AtomicUnit<V>[]
+  dimension?: Record<string, number>,
+  value?: V
+}
+
+type findUnitFn<T> = (unitString: string) => { unit: UnitPropsButCooler<T>, prefix: string } | null
+
+
 /**
  * Returns a new Parser.
  */
-export default function createParser (options, findUnit, nBaseQuantities) {
+export default function createParser<T> (options: Options<T>, findUnit: findUnitFn<T>) {
   // private variables and functions for the Unit parser
   let text, index, c
 
@@ -145,7 +156,7 @@ export default function createParser (options, findUnit, nBaseQuantities) {
    * @param {string} str        A string like "5.2 inch", "4e2 cm/s^2"
    * @return {Object} { value, unitArray }
    */
-  function parse (str) {
+  function parse (str): ParsedUnit<T|number> {
     // console.log(`parse("${str}")`)
 
     text = str
@@ -156,15 +167,12 @@ export default function createParser (options, findUnit, nBaseQuantities) {
       throw new TypeError('Invalid argument in parse, string expected')
     }
 
-    const unit = {}
+    const unit: ParsedUnit = {}
 
     unit.units = []
 
-    // Initialize this unit's dimension array
-    unit.dimension = []
-    for (let i = 0; i < nBaseQuantities; i++) {
-      unit.dimension[i] = 0
-    }
+    // Initialize this unit's dimensions
+    unit.dimension = {}
 
     let powerMultiplierCurrent = 1
     let expectingUnit = false
@@ -242,7 +250,7 @@ export default function createParser (options, findUnit, nBaseQuantities) {
           // No valid number found for the power!
           throw new SyntaxError('In "' + str + '", "^" must be followed by a floating-point number')
         }
-        power *= p
+        power *= +p
       }
 
       // Add the unit to the list
@@ -252,8 +260,8 @@ export default function createParser (options, findUnit, nBaseQuantities) {
         power: power
       })
 
-      for (let i = 0; i < unit.dimension.length; i++) {
-        unit.dimension[i] += (found.unit.dimension[i] || 0) * power
+      for (let dim of Object.keys(found.unit.dimension)) {
+        unit.dimension[dim] = (unit.dimension[dim] || 0) + (found.unit.dimension[dim] || 0) * power
       }
 
       skipWhitespace()

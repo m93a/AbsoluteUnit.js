@@ -38,7 +38,7 @@ let h = unit(19.6, 'm')
 let k = unit('45', 'W / m K')
 ```
 
-Units can be simple (`4 kg`) or compound (`8.314 J/mol K`). They may also be valueless (`hour`). Below are more examples of parsing units:
+Units can be simple (`4 kg`) or compound (`8.314 J/mol K`). They may also be valueless (`hour`). Below are more examples of creating units:
 
 ```js
 unit('2in')
@@ -47,7 +47,7 @@ unit('8.314 kg m^2 / s^2 mol K')
 unit('kW / kg K')
 ```
 
-Parentheses are not used. Any units appearing before a `/` are in the numerator of the resulting unit, and any units appearing after the `/` are in the denominator. Any `*`'s will be ignored.
+The string portion of a unit may contain one `"/"`. Any units appearing before the `/` will be in the numerator of the resulting unit, and any units appearing after the `/` will be in the denominator. Parentheses and `*`'s will be ignored.
 
 ### Converting Units
 
@@ -82,7 +82,7 @@ let h = unit(19.6, 'm')
 h.mul(2).div(g).sqrt()   // 2 s
 ```
 
-Strings and numbers are implicitly converted to units within a chained expression. When chaining operators, they will execute in order from left to right, so your "expression" may not follow the usual, mathematical order of operations.
+Strings and numbers are implicitly converted to units within a chained expression. When chaining operators, they will execute in order from left to right. This may not be the usual, mathematical order of operations:
 
 ```js
 unit('3 ft').add('6 in').mul(2)   // 7 ft
@@ -98,7 +98,7 @@ Units are immutable, so every operation on a unit creates a new unit.
 
 ### Formatting
 
-Use either the `format` method to format a unit as a string. `toString` is an alias for `format`.
+Use the `format` method to format a unit as a string. `toString` is an alias for `format`.
 
 ```js
 unit('1 lb').to('kg').format() // '0.45359237 kg'
@@ -126,36 +126,36 @@ unit('1 lb').to('kg').format({ prefix: 'always', prefixMin: 1, precision: 4 }) /
 
 These are the available options and their defaults:
 
-- `parentheses: false`. When formatting a unit, group the numerator and/or denominator in parentheses if multiple units are present.
+- `parentheses` -- *Default:* `false`. When formatting a unit, group the numerator and/or denominator in parentheses if multiple units are present.
 
   ```js
   unit('45 W / m K').format({ parentheses: true }) // 45 W / (m K)
   ```
 
-- `precision: 15`. The number of significant figures to output when converting a unit to a string. Reducing this can help reduce the appearance of round-off errors. A value of 0 will disable rounding entirely.
+- `precision` -- *Default:* `15`. The number of significant figures to output when converting a unit to a string. Reducing this can help reduce the appearance of round-off errors. A value of 0 will disable rounding entirely.
 
   ```js
   unit('180 deg').to('rad').format({ precision: 6 }) // 3.14159 rad
   ```
 
-- `prefix: 'auto'`. When formatting a unit, this option will specify whether the `toString` and `format` methods are allowed to choose an appropriately sized prefix in case of very small or very large quantities. Possible values are `'auto'`, `'always'`, or `'never'`. If `'auto'` is chosen, then a prefix is always chosen unless the `unit` was constructed using the `to()` method.
+- `prefix` -- *Default:* `'auto'`. When formatting a unit, this option will specify whether the `toString` and `format` methods are allowed to choose an appropriately sized prefix in case of very small or very large quantities. Possible values are `'auto'`, `'always'`, or `'never'`. If `'auto'` is chosen, then a prefix is always chosen unless the `unit` was constructed using the `to()` method.
 
-- `prefixMin: 0.1`. When choosing a prefix, the smallest formatted value of a `unit` that is allowed.
+- `prefixMin` -- *Default:* `0.1`. When choosing a prefix, the smallest formatted value of a `unit` that is allowed.
 
-- `prefixMax: 1000`. When choosing a prefix, the largest formatted value of a `unit` that is allowed.
+- `prefixMax` -- *Default:* `1000`. When choosing a prefix, the largest formatted value of a `unit` that is allowed.
 
-- `prefixesToChooseFrom: 'common'`. When choosing a prefix, whether to consider all allowed prefixes or just the common ones for that unit. Possible values are `'common'` and `'all'`.
+- `prefixesToChooseFrom` -- *Default:* `'common'`. When choosing a prefix, whether to consider all allowed prefixes or just the common ones for that unit. Possible values are `'common'` and `'all'`.
 
-- `simplify: 'auto'`. Specifies if UnitMath should attempt to simplify the units before formatting as a string. Possible values are `'auto'`, `'always'`, or `'never'`. If `'auto'` or `'always'`, then `u.toString()` essentially becomes equivalent to `u.simplify().toString()`. The original `u` is never modified. When `'auto'` is used, simplification is skipped if the unit is valueless or was constructed using the `to()` method.
+- `simplify` -- *Default:* `'auto'`. Specifies if UnitMath should attempt to simplify the units before formatting as a string. Possible values are `'auto'`, `'always'`, or `'never'`. If `'auto'` or `'always'`, then `u.toString()` essentially becomes equivalent to `u.simplify().toString()`. The original `u` is never modified. When `'auto'` is used, simplification is skipped if the unit is valueless or was constructed using the `to()` method.
 
-- `simplifyThreshold: 2`. A factor that affects whether the `format` method will output the original unit or a simplified version. The original unit will always be output unless the 'complexity' of the unit is reduced by an amount equal to or greater than the `simplifyThreshold`. A lower value results in more units being simplified, while a higher number results in fewer units being simplified. The complexity of a unit is roughly equal to the number of 'symbols' that are required to write the unit.
+- `simplifyThreshold` -- *Default:* `2`. A factor that affects whether the `format` method will output the original unit or a simplified version. The original unit will always be output unless the 'complexity' of the unit is reduced by an amount equal to or greater than the `simplifyThreshold`. A lower value results in more units being simplified, while a higher number results in fewer units being simplified. The complexity of a unit is roughly equal to the number of 'symbols' that are required to write the unit.
 
   ```js
   unit('8 kg m / s^2').format() // 8 N
   unit('8 kg m / s^2').format({ simplifyThreshold: 6 })) // 8 kg m / s^2
   ```
 
-- `system: 'auto'`. The unit system to use when simplifying a `unit`. Available systems are `si`, `cgs`, `us`, and `auto`. When `system === 'auto'`, UnitMath will try to infer the unit system from the individual units that make up that `unit`.
+- `system` -- *Default:* `'auto'`. The unit system to use when simplifying a `unit`. Available systems are `si`, `cgs`, `us`, and `auto`. When `system === 'auto'`, UnitMath will try to infer the unit system from the individual units that make up that `unit`.
 
   ```js
   unit = unit.config({ system: 'auto' })
@@ -164,7 +164,19 @@ These are the available options and their defaults:
   unit('400 N').div('10 cm^2').toString()  // "400 kPa"
   ```
 
-- `subsystem: 'auto'` *Not yet implemented.* The subsystem, or technical field, etc., to use when simplifying a `unit`. It can provide additional hints about which units to use when there are multiple options within the same system. Available subsystems are `'mechanics'`, `'chemistry'`, `'electricity_and_magnetism'`, etc. When `subsystem === 'auto'`, UnitMath will try to infer the subsystem from the individual units that make up that `unit`:
+  Specifying a unit system other than `'auto'` will force UnitMath to use the specified system. Use the `config` function to apply the system everywhere, or use the `format` function to apply to a single statement:
+
+  ```js
+  unit = unit.config({ system: 'us' })
+
+  let a = unit('5 m').div('2 s')
+
+  console.log(a.format()) // 8.202099737532809 ft / s
+  console.log(a.format({ system: 'si'})) // 2.5 m / s
+
+  ```
+
+- `subsystem` -- *Default:* `'auto'` *Not yet implemented.* The subsystem, or technical field, etc., to use when simplifying a `unit`. It can provide additional hints about which units to use when there are multiple options within the same system. Available subsystems are `'mechanics'`, `'chemistry'`, `'electricity_and_magnetism'`, etc. When `subsystem === 'auto'`, UnitMath will try to infer the subsystem from the individual units that make up that `unit`:
 
   ```js
   // Proposed, but not yet implemented
@@ -219,7 +231,7 @@ To create a user-defined unit, pass a `definitions` object to `unit.config()`:
   unit('1 lightyear').to('mile') // 5878625373183.608 mile
   ```
 
-The `definitions` contains five keys which allow additional customization of the unit system. These are: `units`, `prefixes`, `unitSystems`, `baseQuantities`, and `quantities`.
+The `definitions` contains two properties which allow additional customization of the unit system: `units` and `prefixes`.
 
 **definitions.units**
 
@@ -252,7 +264,7 @@ You can also supply an object for additional customization. These are all the op
   }
   ```
 
-- `quantity`: This is required for base units that are not defined in terms of other units, such as `meter` and `second`. For derived units, such as `joule`, the `quantity` is determined automatically from the unit's `value`.
+- `quantity`: Specifying a `quantity` will create a _base unit_. This is required for units that are not defined in terms of other units, such as `meter` and `second`:
 
   ```js
   units: {
@@ -260,7 +272,23 @@ You can also supply an object for additional customization. These are all the op
   }
   ```
 
-- `prefixes`: Specifies which group of prefixes will be allowed when parsing the unit. The default is `'NONE'`.
+  Only use `quantity` to define _base units_. Do **not** use `quantity` to define a derived unit:
+
+  ```js
+  // Incorrect
+  units: {
+    meter: { quantity: 'LENGTH', value: 1 }
+    square_meter: { quantity: 'LENGTH^2', value: 1 }
+  }
+
+  // Correct
+  units: {
+    meter: { quantity: 'LENGTH', value: 1 }
+    square_meter: { value: '1 meter^2' }  
+  }
+  ```
+
+- `prefixes` -- *Default:* `'NONE'`. Specifies which group of prefixes will be allowed when parsing the unit.
 
   ```js
   units: {
@@ -290,6 +318,20 @@ You can also supply an object for additional customization. These are all the op
   }
   ```
 
+- `basePrefix`: Optional. The prefix to use for a _base unit_, if the base unit has one. This is necessary for units such as kilogram, which is a base unit but has a prefix.
+
+  ```js
+  units: {
+    g: {
+      quantity: 'MASS',
+      prefixes: 'SHORT',
+      commonPrefixes: ['n', 'u', 'm', '', 'k'],
+      value: 0.001,
+      basePrefix: 'k' // Treat as if 'kg' is the base unit, not 'g'
+    },
+  }
+  ```
+
 - `aliases`: Shortcut to create additional units with identical definitions.
 
   ```js
@@ -298,7 +340,7 @@ You can also supply an object for additional customization. These are all the op
   }
   ```
 
-- `offset`: Used when the zero-value of this unit is different from the zero-value of the base unit.
+- `offset` -- *Default:* `0`: Used when the zero-value of this unit is different from the zero-value of the base unit.
 
   ```js
   units: {
@@ -308,49 +350,6 @@ You can also supply an object for additional customization. These are all the op
     }
   }
   ```
-
-- `autoAddToSystem`: An optional string value, such as `'si'`, `'us'`, or `'auto'`. Causes this unit to automatically be added to the specified unit system. A value of `'auto'` will cause UnitMath to infer the system from the unit's `value`. This is a shortcut for setting `definitions.quantities` and `definitions.unitSystem` directly:
-
-  ```js
-  definitions: {
-    units: {
-      snap: {
-        value: '1 m/s^4',
-        autoAddToUnitSystem: 'si'
-      }
-    },
-  }
-  ```
-
-  Which is equivalent to the following: 
-
-  ```js
-  definitions: {
-    units: {
-      snap: {
-        value: '1 m/s^4'
-      }
-    },
-    unitSystems: {
-      si: {
-        snap_QUANTITY: 'snap'
-      }
-    },
-    quantities: {
-      snap_QUANTITY: 'LENGTH TIME^-4'
-    }
-  }
-  ```
-
-  This causes `snap` to become part of the `si` system, which means it may be used to simplify a Unit:
-
-  ```js
-  unit('1 m/s^2').div('2 s^2').simplify() // 0.5 snap
-  ```
-
-  You may also set the global option `definitions.autoAddToSystem` in order to set the same value for *all* user-defined units at the same time.
-
-  Behind the scenes, `autoAddToSystem` automatically adds the necessary entries to `definitions.quantities` and `definitions.unitSystem` so that the unit becomes a member of the specified unit system, allowing it to be used to simplify a Unit. If, however, existing values for `definitions.quantities` or `definitions.unitSystem` already exist in the user-defined or built-in units, `autoAddToSystem` will *not* override them. If you need more control over how your unit systems are set up, you should set `definitions.quantities` and `definitions.unitSystem` directly, rather than using `autoAddToSystem`.
 
 **definitions.prefixes**
 
@@ -372,69 +371,23 @@ prefixes: {
 }
 ```
 
-**definitions.baseQuantities**
+**definitions.systems**
 
-The `definitions.baseQuantities` array defines the dimensionally-independent quantities (`LENGTH`, `MASS`, `LUMINOUS_INTENSITY`, etc.) that form the basis of all units. To add a new base quantity, supply the new base quantity or quantities in an array:
-
-```js
-baseQuantities: [ 'MY_NEW_BASE_QUANTITY' ]
-```
-
-**definitions.quantities**
-
-The `definitions.quantities` object defines other quantities that are derived from the base quantities, such as `FORCE`. These are used in the `unitSystems` object to specify the preferred unit for that quantity. The syntax for defining a `quantity` is more strict than that used to parse units generally. The format of a quantity is: zero or more terms, separated by spaces, where each term comprises a `baseQuantity`, optionally followed by a caret `^` and a floating point number:
+This object assigns one or more units to a number of systems. Each key in `definitions.systems` becomes a system. Each system lists all the units that should be associated with that system in an array. The units may include prefixes.
 
 ```js
-quantities: {
-  ELECTRIC_POTENTIAL: 'MASS LENGTH^2 TIME^-3 CURRENT^-1'
+systems: {
+  si: ['m', 'kg', 's', 'N', 'J', 'm^3', 'm/s'],
+  cgs: ['cm', 'g', 's', 'dyn', 'erg', 'cm^3', 'cm/s'],
+  us: ['ft', 'lbm', 's', 'lbf', 'btu', 'gal', 'ft/s']
 }
 ```
 
-**definitions.unitSystems**
-
-The `definitions.unitSystems` object defines the preferred units to use with a particular unit system. Any or all of the `quantities` in a unit system may be assigned a single unit, optionally with a prefix, that will be used when formatting a matching unit in that system.
-
-```js
-unitSystems: {
-  si: {
-    AMOUNT_OF_SUBSTANCE: 'mol',
-    CAPACITANCE: 'F',
-    CURRENT: 'A',
-    MASS: 'kg',
-    ...
-  }
-}
-```
+When UnitMath formats a unit, it will try to use one of the units from the specified system first. If the system does not contain a matching unit, it will choose from all available units.
 
 **definitions.skipBuiltIns**
 
 A boolean value indicating whether to skip creation of the built-in units. If `true`, only the user-defined units and quantities defined in `definitions` will be created.
-
-**definitions.autoAddToSystem**
-
-Global setting that applies `autoAddToSystem` to all user-defined units simultaneously. This means that the following two definitions are equivalent:
-
-```js
-definitions: {
-  units: {
-    snap: '1 m/s^4'
-  },
-  autoAddToUnitSystem: 'auto'
-}
-```
-
-```js
-definitions: {
-  units: {
-    snap: {
-      value: '1 m/s^4',
-      autoAddToUnitSystem: 'auto'
-    }
-  },
-}
-```
-
-For more information, see `definitions.units.autoAddToUnit`.
 
 #### Querying current unit definitions ####
 
@@ -447,65 +400,40 @@ unit.definitions()
 Below is an abbreviated sample output from `unit.definitions()`. It can serve as a starting point to create your own definitions.
 
 ```js
-{ units:
-   { '': { quantity: 'UNITLESS', value: 1 },
-     meter:
-      { quantity: 'LENGTH',
-        prefixes: 'LONG',
-        commonPrefixes: [ 'nano', 'micro', 'milli', 'centi', '', 'kilo' ],
-        value: 1,
-        aliases: [ 'meters' ] },
-     m:
-      { prefixes: 'SHORT',
-        commonPrefixes: [ 'n', 'u', 'm', 'c', '', 'k' ],
-        value: '1 meter' },
-     inch: { value: '0.0254 meter', aliases: [ 'inches', 'in' ] },
-     foot: { value: '12 inch', aliases: [ 'ft', 'feet' ] },
-     yard: { value: '3 foot', aliases: [ 'yd', 'yards' ] },
-     mile: { value: '5280 ft', aliases: [ 'mi', 'miles' ] },
-     ... },
-  prefixes:
-   { NONE: { '': 1 },
-     SHORT:
-      { '': 1,
-        da: 10,
-        h: 100,
-        k: 1000,
-        ...
-        d: 0.1,
-        c: 0.01,
-        m: 0.001,
-        ... },
-     ... },
-  unitSystems:
-   { si:
-      { AMOUNT_OF_SUBSTANCE: 'mol',
-        CAPACITANCE: 'F',
-        CURRENT: 'A',
-        MASS: 'kg'
-        ... },
-     ... },
-  baseQuantities:
-   [ 'MASS',
-     'LENGTH',
-     'TIME',
-     'CURRENT',
-     'TEMPERATURE',
-     'LUMINOUS_INTENSITY',
-     'AMOUNT_OF_SUBSTANCE',
-     'ANGLE',
-     'BIT',
-     'SOLID_ANGLE' ],
-  quantities:
-   { UNITLESS: '',
-     ABSEMENT: 'LENGTH TIME',
-     ACCELERATION: 'LENGTH TIME^-2',
-     ANGULAR_ACCELERATION: 'TIME^-2 ANGLE',
-     ANGULAR_MOMENTUM: 'MASS LENGTH^2 TIME^-1 ANGLE',
-     ANGULAR_VELOCITY: 'TIME^-1 ANGLE',
-     AREA: 'LENGTH^2',
-     ... } }
-
+{ 
+  units: {
+    '': { quantity: 'UNITLESS', value: 1 },
+    meter: {
+      quantity: 'LENGTH',
+      prefixes: 'LONG',
+      commonPrefixes: [ 'nano', 'micro', 'milli', 'centi', '', 'kilo' ],
+      value: 1,
+      aliases: [ 'meters' ]
+    },
+    m: {
+      prefixes: 'SHORT',
+      commonPrefixes: [ 'n', 'u', 'm', 'c', '', 'k' ],
+      value: '1 meter'
+    },
+    inch: { value: '0.0254 meter', aliases: [ 'inches', 'in' ] },
+    foot: { value: '12 inch', aliases: [ 'ft', 'feet' ] },
+    yard: { value: '3 foot', aliases: [ 'yd', 'yards' ] },
+    mile: { value: '5280 ft', aliases: [ 'mi', 'miles' ] },
+    ... },
+  prefixes: {
+    NONE: { '': 1 },
+    SHORT: {
+      '': 1,
+      da: 10,
+      h: 100,
+      k: 1000,
+      ...
+      d: 0.1,
+      c: 0.01,
+      m: 0.001,
+      ... },
+    ... },
+  }
 ```
 
 #### Custom Types
@@ -727,12 +655,12 @@ unitFunny('3.14159 rad').toString('$', '_') // '$9_5_1_4_1_._3 rad'
   r.to().format() // 10 kg m^2 / s^3 A^2
   ```
 
-- `#toSI()`
+- `#toBaseUnits()`
 
-  Returns a new unit that is the SI representation of this unit.
+  Returns a new unit in the base representation.
 
   ```js
-  unit('10 ft/s').toSI() // 3.048 m / s
+  unit('10 ft/s').toBaseUnits() // 3.048 m / s
   ```
 
 - `getValue()`
